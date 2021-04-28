@@ -1,8 +1,7 @@
 <template>
     <nav class="navigation">
         <ul class="navigation__list" v-bind:links='links'>
-            <li title="hi" v-for="link in links" v-bind:key="link"> <router-link to="/{{link}}"></router-link> {{link}}</li>
-            <!-- <li v-for='link in links' v-bind:key="link" class="navigation__link"> <a  href="/">{{link}}</a> </li> -->
+            <li title="hi" v-for="link in links" v-bind:key="link"> <router-link to="/workspace">{{link}}</router-link> </li>
         </ul>
     </nav>
 </template>
