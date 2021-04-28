@@ -12,7 +12,7 @@ export default new Router({
             component: Home
         },
         {
-            path: '/workspace',
+            path: '/add-task',
             component: Workspace
         },
         {

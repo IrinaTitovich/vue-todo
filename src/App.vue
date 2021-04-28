@@ -1,7 +1,7 @@
 <template>
 <div id="app">
   <app-header v-bind:links="links"></app-header>
-  <router-view />
+  <router-view v-bind:tasks="tasks" />
 </div>
 </template>
 
@@ -24,6 +24,9 @@ export default {
         {name:'butter', price:'8$', quantity:'3'},
       ]
     }
+  },
+  computed:{
+
   }
 }
 </script>
