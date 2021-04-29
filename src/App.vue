@@ -1,7 +1,7 @@
 <template>
 <div id="app">
-  <app-header v-bind:links="links"></app-header>
-  <router-view v-bind:tasks="tasks" />
+  <app-header v-bind:links="links" v-bind:auth="auth" v-on:isAuth='changeAuthorize($event)'></app-header>
+  <router-view v-bind:tasks="tasks" v-bind:auth="auth"/>
 </div>
 </template>
 
@@ -13,6 +13,7 @@ export default {
   },
   data(){
     return {
+      auth:false,
       links:[
         'Home',
         'See All',
@@ -25,8 +26,19 @@ export default {
       ]
     }
   },
+  methods:{
+    changeAuthorize(ev){
+      this.auth=ev
+      localStorage.setItem("auth",this.auth.toString())
+      console.log(localStorage.getItem("auth"))
+    }
+  },
   computed:{
 
+  },
+  mounted(){
+    console.log("changeAuth")
+    console.log(this.auth)
   }
 }
 </script>

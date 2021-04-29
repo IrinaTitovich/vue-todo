@@ -1,5 +1,7 @@
 <template>
     <nav class="navigation">
+        <button v-if='auth' v-on:click="changeAuth">Выйти</button>
+        <button v-if='!auth' v-on:click="changeAuth">Войти</button>
         <ul class="navigation__list" v-bind:links='links'>
             <li class="navigation__link" v-for="link in links" v-bind:key="link"> <router-link class="navigation__link" v-bind:to="'/'+link.toLowerCase().split(' ').join('-')" >{{link}}</router-link> </li>
         </ul>
@@ -9,7 +11,19 @@
 
 <script>
 export default {
-    props:['links']
+    props:['links','auth'],
+    data(){
+        return{
+            isUserAuthorized:this.auth
+        }
+    },
+    methods:{
+        changeAuth(){
+            this.isUserAuthorized = !this.isUserAuthorized
+            this.$emit('isAuth',this.isUserAuthorized)
+
+        }
+    }
 }
 </script>
 

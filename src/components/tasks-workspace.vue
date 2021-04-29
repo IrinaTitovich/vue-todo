@@ -42,7 +42,7 @@ export default {
       if (this.newTask.name.trim() 
       
       ){
-        this.tasks.push({name:this.newTask.name,price:this.newTask.price})
+        this.tasks.push({name:this.newTask.name,price:parseInt(this.newTask.price.toString())+'$'})
         this.newTask.name = ''
         this.newTask.price = 0
       }
