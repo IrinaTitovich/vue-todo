@@ -1,8 +1,8 @@
 <template>
     <nav class="navigation">
-        <button v-if='auth' v-on:click="changeAuth">Выйти</button>
-        <button v-if='!auth' v-on:click="changeAuth">Войти</button>
-        <ul class="navigation__list" v-bind:links='links'>
+        <button v-show='auth' v-on:click="changeAuth">Выйти</button>
+        <button v-show='!auth' v-on:click="changeAuth">Войти</button>
+        <ul class="navigation__list">
             <li class="navigation__link" v-for="link in links" v-bind:key="link"> <router-link class="navigation__link" v-bind:to="'/'+link.toLowerCase().split(' ').join('-')" >{{link}}</router-link> </li>
         </ul>
     </nav>
@@ -10,20 +10,18 @@
 
 
 <script>
+import store from '../store'
+import {mapMutations, mapGetters} from 'vuex'
+
+
 export default {
-    props:['links','auth'],
-    data(){
-        return{
-            isUserAuthorized:this.auth
-        }
+    store,
+    computed:{
+        ...mapGetters({auth:'currentAuth', links:'headerLinks'}),
     },
     methods:{
-        changeAuth(){
-            this.isUserAuthorized = !this.isUserAuthorized
-            this.$emit('isAuth',this.isUserAuthorized)
-
-        }
-    }
+        ...mapMutations({changeAuth:'CHANGE_AUTH'})
+    },
 }
 </script>
 
@@ -38,7 +36,6 @@ ul{
     align-items: center;
     background-color: #333;
     height: 10vh;
-
 }
 .navigation__list{
     display: flex;

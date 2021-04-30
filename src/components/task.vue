@@ -1,11 +1,12 @@
 <template>
     <div class="card">
-        <div class="card__container" >
-
-                <p class="card__element"> {{task.name}}</p>
-                <hr>
-                <p class="card__element">{{task.price}}</p>
-
+        <div class="card__container" v-if='task'>
+            <p class="card__element"> {{task.name}}</p>
+            <hr>
+            <p class="card__element">{{task.price}}</p>
+        </div>
+        <div v-else>
+            <span>loading...</span>
         </div>
     </div>
 
@@ -13,49 +14,52 @@
 
 
 <script>
+import { mapGetters } from 'vuex'
+import store from '../store/index'
 
 export default {
-    props:['tasks'],
+    props:[],
     data(){
         return {
-            task:{
-                name:'',
-                price:''
-            }
+            routeName:'',
         }
+    },
+    store,
+    computed:{
+        ...mapGetters({
+            task:'taskByName'
+            })
     },
     created(){
         const routeName = this.$route.params.name.toString()
-        console.log(routeName)
-        const task = this.tasks.filter(t=>t.name.toLowerCase() === routeName)[0]
-        this.task.name = task.name
-        this.task.price = task.price
+        this.$store.commit('SET_SEARCH_NAME', routeName)
+    },
+    mounted(){
     }
 }
 </script>
 
 <style>
 .card {
-  height: 70vh;
-  width: 100%;
+    height: 70vh;
+    width: 100%;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .card__container {
-  
-  width: 40%;
-  height: 80%;
-  margin: 0 auto;
-  padding-top: 1rem;
+    width: 40%;
+    height: 80%;
+    margin: 0 auto;
+    padding-top: 1rem;
 
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 
-  background-color: #eee;
-  border:1px solid #ccc
+    background-color: #eee;
+    border:1px solid #ccc
 }
 .card__element{
     font-size: 2rem;
