@@ -49,6 +49,7 @@ export default {
     justify-content: center;
 }
 .card__container {
+    min-width: 300px;
     width: 40%;
     height: 80%;
     margin: 0 auto;

@@ -105,6 +105,7 @@ export default {
   width: 100%;
 }
 .workspace__container {
+  min-width: 300px;
   width: 60%;
   margin: auto;
   padding-top: 1rem;
@@ -128,6 +129,7 @@ export default {
   align-items: space-between;
   justify-content: space-between;
   width: 45%;
+  min-width:280px;
   min-height: 10rem;
   border: 1px solid #ccc;
   padding: 1em;

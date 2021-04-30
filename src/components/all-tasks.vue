@@ -2,8 +2,8 @@
     <div class="all-tasks">
         <div class="all-tasks__container" v-if='auth' >
             <p class="all-tasks__task">
-                <span>Название</span>
-                <span>Суммарная цена</span>
+                <span class="all-tasks__title">Название</span>
+                <span class="all-tasks__title">Суммарная цена</span>
             </p>
             <router-link  v-bind:to="'/task/'+task.name.toLowerCase().split(' ').join('')" class="all-tasks__task" v-for='(task,idx) in tasks' v-bind:key="task.name">
                 <span class="all-tasks__task-name">{{idx+1}}. {{task.name}}</span>
@@ -58,6 +58,9 @@ export default {
 
     display: flex;
     flex-direction: column;
+}
+.all-tasks__title{
+    font-size: 1rem;
 }
 .all-tasks__task{
     display: flex;
