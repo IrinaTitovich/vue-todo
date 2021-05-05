@@ -1,8 +1,8 @@
 <template>
   <div class="workspace">
     <div class="workspace__container">
-      <app-card v-if="!taskToEdit" :task="taskToEdit"  @newTask="addNewTask($event)" />
-      <app-card v-else :task="taskToEdit" @newTask="editTaskInStore($event)" />
+      <app-card v-if="!name.length"  @addTaskInStore="addNewTask($event)" />
+      <app-card v-else :name="name" :edit='true' :price='price' :quantity='quantity' @editTaskInStore = "editTaskInStore($event)" />
       <div v-if="auth" class="workspace__tasks-list">
         <div
           class="workspace__task task"
@@ -14,7 +14,7 @@
             <span class="task__name"> {{ task.name }}</span>
           </p>
           <div class="task__buttons">
-            <button class="mini-btns task__edit" @click="editTask(task.name)">
+            <button class="mini-btns task__edit" @click="editTask(task.name,task.price,task.quantity)">
               &#9998;
             </button>
             <button class="mini-btns task__delete" @click="removeTask(task.name)">
@@ -44,7 +44,11 @@ export default {
   },  
   data() {
     return {
-      taskToEdit:null
+
+        name:'',
+        price:0,
+        quantity:0
+
     };
   },
   computed: {
@@ -64,25 +68,19 @@ export default {
       return parseInt(price.toString()) + "$";
     },
 
-    editTask(taskName){
-
-      this.setSearchName(taskName)
-      this.taskToEdit=this.taskByName
-      console.log(this.taskToEdit)
-
+    editTask(taskName,price,quantity){
+      this.name = taskName
+      this.price = parseInt(price)
+      this.quantity = parseInt(quantity)
     },
 
 
     editTaskInStore(newTask) {
-      if(this.taskToEdit){
-        console.log('nt',newTask)
-        let indexInStore = this.indexOfTheTaskByName
-        console.log(this.tasks[indexInStore])
-        this.editTaskInState({index:indexInStore,task:newTask})
-        console.log(this.tasks)
-        this.taskToEdit=null
+      console.log(newTask)
+      this.setSearchName(newTask.name)
+      const ind = this.indexOfTheTaskByName
+      this.editTaskInState({index:ind,task:newTask})
 
-      } 
     }
   },
 

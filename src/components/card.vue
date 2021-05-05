@@ -1,8 +1,8 @@
 <template>
     <div class="form">
-        <form class="form__addTask" @submit.prevent="$emit('newTask', newTask)">
-        <h4>
-          <template v-if='!task'>Добавить</template>
+        <form class="form__addTask" @submit.prevent="submit()">
+        <h4 @click = 'add()'>
+          <template v-if='!edit'>Добавить</template>
           <template v-else>Изменить</template>
            задание
 
@@ -14,9 +14,9 @@
             type="text"
             class="form__input"
             id="taskName"
-            v-model="name"
+            v-model="newTask.name"
             placeholder="Название"
-            required
+
           />
         </label>
         <label for="taskPrice">
@@ -26,9 +26,8 @@
             class="form__input"
             name="price"
             id="taskPrice"
-            v-model="price"
+            v-model="newTask.price"
             placeholder="Цена"
-            required
           />
         </label>
         <label for="taskQuantity">
@@ -38,13 +37,13 @@
             name="quantity"
             class="form__input"
             id="taskQuantity"
-            v-model="quantity"
+            v-model="newTask.quantity"
             placeholder="Количество"
-            required
+
           />
         </label>
         <button class='btn' type="submit" >
-            <template v-if='!task'>Добавить</template>
+            <template v-if='!edit'>Добавить</template>
             <template v-else> Изменить</template>
             </button>
       </form>
@@ -56,42 +55,47 @@
 
 export default {
   props: {
-    task: {
-      name:String,
-      price:Number,
-      quantity:Number
-    }||null
+      name:{
+        type:String,
+        default:"",
+      },
+      price:{
+        type:Number,
+        default:0
+      },
+      quantity:{
+        type:Number,
+        default:0
+      },
+        edit:{
+        type:Boolean,
+        default:false
+      }
   },
   data(){
     return{
-        name:'',
-        price:0,
-        quantity:0
+
     }
   },
   methods:{
+      submit(){
+        if (this.edit){
+          this.$emit('editTaskInStore', this.newTask)
+        } else{
+        this.$emit('addTaskInStore', this.newTask)
+        }
+
+      }
   },
   computed:{
       newTask(){
         return {
           name:this.name,
-          price:parseInt(this.price),
-          quantity:parseInt(this.quantity)
+          price:this.price,
+          quantity:this.quantity
         }
       }
   },
-  beforeMount(){
-    console.log('created')
-    if (this.task){
-      this.name= this.task.name,
-      this.price = this.task.price,
-      this.quantity = this.task.quantity
-    } else{
-      this.name= '',
-      this.price = 0,
-      this.quantity = 0
-    }
-  }
 }
 </script>
 
