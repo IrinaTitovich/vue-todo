@@ -18,7 +18,6 @@ import { mapGetters } from 'vuex'
 import store from '../store/index'
 
 export default {
-    props:[],
     data(){
         return {
             routeName:'',

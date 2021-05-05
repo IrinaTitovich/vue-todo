@@ -5,7 +5,7 @@
                 <span class="all-tasks__title">Название</span>
                 <span class="all-tasks__title">Суммарная цена</span>
             </p>
-            <router-link  v-bind:to="'/task/'+task.name.toLowerCase().split(' ').join('')" class="all-tasks__task" v-for='(task,idx) in tasks' v-bind:key="task.name">
+            <router-link  :to="getLink(task.name)" class="all-tasks__task" v-for='(task,idx) in tasks' :key="task.name">
                 <span class="all-tasks__task-name">{{idx+1}}. {{task.name}}</span>
                 <span>{{sumPrice(task.price,task.quantity)}}$</span>
             </router-link>
@@ -36,13 +36,11 @@ export default {
     methods:{
         sumPrice(price,quantity){
             return parseInt(price)*Number(quantity)
+        },
+        getLink(taskName){
+            return '/task/'+taskName.toLowerCase().split(' ').join('')
         }
     },
-    created(){
-        setTimeout(()=>{
-            this.tasks=this.$store.tasks
-        },1200)
-    }
 }
 </script>
 

@@ -1,7 +1,7 @@
 import resp from '../../data'
 
 
-const loadData = (time) => {
+const loadData = (time=300) => {
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve(resp)
@@ -21,6 +21,9 @@ export default {
         },
         taskByName(state) {
             return state.tasks.find(t => t.name.toLowerCase() === state.searchName.toLowerCase())
+        },
+        indexOfTheTaskByName(state){
+            return state.tasks.findIndex(t=>t.name.toLowerCase() === state.searchName.toLowerCase())
         }
     },
     mutations: {
@@ -36,6 +39,10 @@ export default {
         REMOVE_TASK(state, taskName) {
             state.tasks = state.tasks.filter(t => t.name.toLowerCase() !== taskName.toLowerCase())
 
+        },
+        EDIT_TASK_IN_STATE(state,payload){
+            console.log(payload)
+            state.tasks.splice(payload.index,1,payload.task)
         }
 
     },

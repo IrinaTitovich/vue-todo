@@ -1,44 +1,12 @@
 <template>
   <div class="workspace">
     <div class="workspace__container">
-      <div class="workspace__addTask">
-        <h4>Добавить задание</h4>
-        <label for="taskName">
-          Название
-          <input
-            type="text"
-            class="workspace__input"
-            id="taskName"
-            v-model="newTask.name"
-            placeholder="Название"
-          />
-        </label>
-        <label for="taskPrice">
-          Цена
-          <input
-            type="text"
-            class="workspace__input"
-            id="taskPrice"
-            v-model="newTask.price"
-            placeholder="Цена"
-          />
-        </label>
-        <label for="taskQuantity">
-          Количество
-          <input
-            type="text"
-            class="workspace__input"
-            id="taskQuantity"
-            v-model="newTask.quantity"
-            placeholder="Количество"
-          />
-        </label>
-        <button class='btn' type="submit" v-on:click="addTask()">Добавить</button>
-      </div>
+      <app-card v-if="!taskToEdit" :task="taskToEdit"  @newTask="addNewTask($event)" />
+      <app-card v-else :task="taskToEdit" @newTask="editTaskInStore($event)" />
       <div v-if="auth" class="workspace__tasks-list">
         <div
           class="workspace__task task"
-          v-bind:key="task.name"
+          v-bind:key="idx"
           v-for="(task, idx) in tasks"
         >
           <p class="task__name">
@@ -46,13 +14,18 @@
             <span class="task__name"> {{ task.name }}</span>
           </p>
           <div class="task__buttons">
-            <button class="task__delete" v-on:click="removeTask(task.name)">
+            <button class="mini-btns task__edit" @click="editTask(task.name)">
+              &#9998;
+            </button>
+            <button class="mini-btns task__delete" @click="removeTask(task.name)">
               &times;
             </button>
           </div>
         </div>
       </div>
-      <div class="workspace__tasks-list" v-else>Для просмотра необходима авторизация</div>
+      <div class="workspace__tasks-list" v-else>
+        Для просмотра необходима авторизация
+      </div>
     </div>
   </div>
 </template>
@@ -61,40 +34,58 @@
 <script>
 import store from "../store";
 import { mapGetters, mapMutations } from "vuex";
+import appCard from './card'
 
 export default {
   store,
+  name:'workspace',
+  components:{
+    appCard
+  },  
   data() {
     return {
-      newTask: { 
-        name: "", 
-        price: 0,
-        quantity:0
-        },
+      taskToEdit:null
     };
   },
   computed: {
-    ...mapGetters({ tasks: "allTasks", auth:"currentAuth" }),
+    ...mapGetters({ tasks: "allTasks", auth:"currentAuth",taskByName:"taskByName",indexOfTheTaskByName:"indexOfTheTaskByName" }),
+
   },
   methods: {
-    ...mapMutations({ addTaskToTheStore: "ADD_TASK", removeTask:"REMOVE_TASK" }),
+
+    ...mapMutations({ addTaskToTheStore: "ADD_TASK", removeTask:"REMOVE_TASK", setSearchName:"SET_SEARCH_NAME", editTaskInState:"EDIT_TASK_IN_STATE" }),
+
+    addNewTask(newTask){
+      this.addTaskToTheStore(newTask)
+    },
+
+
     priceToString(price) {
       return parseInt(price.toString()) + "$";
     },
-    addTask: function () {
-      if (this.newTask.name.trim()) {
-        this.addTaskToTheStore({
-          name: this.newTask.name,
-          price: this.priceToString(this.newTask.price),
-          quantity:this.newTask.quantity.toString()
-        });
-        this.newTask.name = "";
-        this.newTask.price = 0;
-        this.newTask.quantity = 0;
-      }
+
+    editTask(taskName){
+
+      this.setSearchName(taskName)
+      this.taskToEdit=this.taskByName
+      console.log(this.taskToEdit)
+
     },
 
+
+    editTaskInStore(newTask) {
+      if(this.taskToEdit){
+        console.log('nt',newTask)
+        let indexInStore = this.indexOfTheTaskByName
+        console.log(this.tasks[indexInStore])
+        this.editTaskInState({index:indexInStore,task:newTask})
+        console.log(this.tasks)
+        this.taskToEdit=null
+
+      } 
+    }
   },
+
 };
 </script>
 
@@ -110,8 +101,8 @@ export default {
   margin: auto;
   padding-top: 1rem;
 }
-.workspace__tasks-list{
-  margin-top: 1em
+.workspace__tasks-list {
+  margin-top: 1em;
 }
 .task {
   display: flex;
@@ -123,27 +114,40 @@ export default {
   border: 1px solid #ccc;
   margin: 1rem 0;
 }
-.workspace__addTask{
+.workspace__addTask {
   display: flex;
   flex-direction: column;
   align-items: space-between;
   justify-content: space-between;
   width: 45%;
-  min-width:280px;
+  min-width: 280px;
   min-height: 10rem;
   border: 1px solid #ccc;
   padding: 1em;
   background-color: #ddd;
 }
-.workspace__addTask label{
+.workspace__addTask label {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.task__delete {
+.task__buttons{
+  height: 1.4rem;
+  width: 4rem;
+  display: flex;
+  justify-content: space-between;
+}
+.mini-btns {
   border-radius: 50%;
   border: none;
-  background-color: rgb(156, 112, 112);
   color: #eee;
+}
+.task__delete{
+  font-size: 1.0rem;
+  background-color: rgb(156, 112, 112);
+}
+.task__edit{
+  background-color: rgb(88, 124, 104);
+  
 }
 </style>

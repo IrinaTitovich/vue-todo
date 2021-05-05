@@ -4,7 +4,7 @@ import Home from './components/Home'
 import AllTasks from './components/all-tasks'
 import Workspace from './components/tasks-workspace'
 import Task from './components/task'
-
+import store from './store'
 
 Vue.use(Router)
 
@@ -28,7 +28,7 @@ export default new Router({
             component: Task,
             name: 'task',
             beforeEnter: (to, from, next) => {
-                if (localStorage.getItem("auth")) {
+                if (store.state.auth) {
                     next()
                 } else {
                     next({ name: 'home' })

@@ -1,9 +1,11 @@
 <template>
     <nav class="navigation">
-        <button v-show='auth' v-on:click="changeAuth">Выйти</button>
-        <button v-show='!auth' v-on:click="changeAuth">Войти</button>
+        <button  @click="changeAuth">
+            <template v-if='auth'>Выйти</template>
+            <template v-else>Войти</template>           
+            </button>
         <ul class="navigation__list">
-            <li class="navigation__link"  v-for="link in links" v-bind:key="link"> <router-link active-class class="navigation__link" v-bind:to="'/'+link.toLowerCase().split(' ').join('-')" >{{link}}</router-link> </li>
+            <li class="navigation__link"  v-for="link in links" v-bind:key="link"> <router-link active-class class="navigation__link" :to="getLink(link)" >{{link}}</router-link> </li>
         </ul>
     </nav>
 </template>
@@ -20,7 +22,10 @@ export default {
         ...mapGetters({auth:'currentAuth', links:'headerLinks'}),
     },
     methods:{
-        ...mapMutations({changeAuth:'CHANGE_AUTH'})
+        ...mapMutations({changeAuth:'CHANGE_AUTH'}),
+        getLink(link){
+            return '/'+link.toLowerCase().split(' ').join('-')
+        }
     },
 }
 </script>
@@ -41,7 +46,7 @@ ul{
     display: flex;
     justify-content: space-around;
 
-min-width: 250px;
+    min-width: 250px;
     width: 30%;
 }
 .navigation__list{
