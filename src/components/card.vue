@@ -14,9 +14,9 @@
             type="text"
             class="form__input"
             id="taskName"
-            v-model="newTask.name"
+            v-model.trim.lazy="newTask.name"
             placeholder="Название"
-
+            required
           />
         </label>
         <label for="taskPrice">
@@ -26,7 +26,7 @@
             class="form__input"
             name="price"
             id="taskPrice"
-            v-model="newTask.price"
+            v-model.lazy.number="newTask.price"
             placeholder="Цена"
           />
         </label>
@@ -37,7 +37,7 @@
             name="quantity"
             class="form__input"
             id="taskQuantity"
-            v-model="newTask.quantity"
+            v-model.lazy.number="newTask.quantity"
             placeholder="Количество"
 
           />

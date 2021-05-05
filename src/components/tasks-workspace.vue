@@ -1,20 +1,23 @@
 <template>
   <div class="workspace">
     <div class="workspace__container">
-      <app-card v-if="!name.length"  @addTaskInStore="addNewTask($event)" />
-      <app-card v-else :name="name" :edit='true' :price='price' :quantity='quantity' @editTaskInStore = "editTaskInStore($event)" />
+      <app-card v-if="!name.length"  @addTaskInStore="addNewTask($event)" key='addPlace' />
+      <app-card v-else :name="name" :edit='true' :price='price' :quantity='quantity' @editTaskInStore = "editTaskInStore($event)" key='editPlace' />
       <div v-if="auth" class="workspace__tasks-list">
         <div
           class="workspace__task task"
           v-bind:key="idx"
           v-for="(task, idx) in tasks"
+          :class="{active:false}"
+
+          @click.self="toggle($event.target)"
         >
-          <p class="task__name">
+          <p  class="task__name">
             <span class="task__number">{{ idx + 1 }}. </span>
             <span class="task__name"> {{ task.name }}</span>
           </p>
-          <div class="task__buttons">
-            <button class="mini-btns task__edit" @click="editTask(task.name,task.price,task.quantity)">
+          <div  class="task__buttons invisible">
+            <button  class="mini-btns task__edit" @click="editTask(task.name,task.price,task.quantity)">
               &#9998;
             </button>
             <button class="mini-btns task__delete" @click="removeTask(task.name)">
@@ -44,11 +47,9 @@ export default {
   },  
   data() {
     return {
-
         name:'',
         price:0,
         quantity:0
-
     };
   },
   computed: {
@@ -63,7 +64,6 @@ export default {
       this.addTaskToTheStore(newTask)
     },
 
-
     priceToString(price) {
       return parseInt(price.toString()) + "$";
     },
@@ -74,13 +74,24 @@ export default {
       this.quantity = parseInt(quantity)
     },
 
-
     editTaskInStore(newTask) {
       console.log(newTask)
       this.setSearchName(newTask.name)
       const ind = this.indexOfTheTaskByName
-      this.editTaskInState({index:ind,task:newTask})
+      this.editTaskInState({
+        index:ind,
+        task:newTask
+        })
+        this.name=''
+        this.price=0
+        this.quantity=0
 
+    },
+
+    toggle(element){
+      element.classList.toggle('active')
+      const buttonsElement = element.lastChild
+      buttonsElement.classList.toggle('invisible')
     }
   },
 
@@ -147,5 +158,12 @@ export default {
 .task__edit{
   background-color: rgb(88, 124, 104);
   
+}
+.active{
+  border: 2px solid #444;
+  background-color: rgba(88, 124, 104,0.1);
+}
+.invisible{
+  display:none;
 }
 </style>
